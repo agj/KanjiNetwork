@@ -24,9 +24,9 @@ var svg = d3.select("body").append("svg")
     .attr("height", height);
 
 var force = d3.layout.force()
-    .gravity(.05)
-    .distance(150)
-    .charge(-200)
+    .gravity(.02)
+    .distance(250)
+    .charge(-250)
     .size([width, height]);
 
 d3.json("kanjis.json", function(error, json) {
@@ -48,7 +48,7 @@ d3.json("kanjis.json", function(error, json) {
       .call(force.drag);
   
   var color = d3.scale.linear()
-    .domain([1, 25])
+    .domain([1, 50])
     .range(["cyan", "magenta"]);
 
   node.append("circle")
