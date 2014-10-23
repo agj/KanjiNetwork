@@ -21,19 +21,18 @@
   <script src="d3.v3.min.js"></script>
 
   <script>
+
     var width = 3000,
-        height = 3000,
-        dotSizeFactor = 0.8,
-        dotSizeK = 1;
+        height = 3000
 
     var svg = d3.select("body").append("svg")
         .attr("width", width)
         .attr("height", height);
 
     var force = d3.layout.force()
-        .gravity(.05)
-        .distance(150)
-        .charge(-200)
+        .gravity(.02)
+        .distance(250)
+        .charge(-250)
         .size([width, height]);
 
     d3.json("kanjis.json", function(error, json) {
@@ -48,31 +47,32 @@
           .attr("class", "link");
 
 
-      var dot = svg.selectAll(".dot")
+      var node = svg.selectAll(".node")
           .data(json.nodes)
         .enter().append("g")
-          .attr("class", "dot")
+          .attr("class", "node")
           .call(force.drag);
 
-      var tag = svg.selectAll(".tag")
-          .data(json.nodes)
-        .enter().append("g")
-          .attr("class", "tag");
-          // .call(force.drag);
-
       var color = d3.scale.linear()
-        .domain([1, 25])
+        .domain([1, 50])
         .range(["cyan", "magenta"]);
 
-      dot.append("circle")
-          .attr("class", "dot")
-          .attr("r", function(d) { return d.weight * dotSizeFactor + dotSizeK })
-          .style("fill", function(d) { return color(d.chapter); });
+      node.append("circle")
+          .attr("class", "node")
+          .attr("r", 5)
+          .style("fill", function(d) { return color(d.chapter); })
 
-      dot.append("title")
+      //node.append("image")
+      //    .attr("xlink:href", "https://github.com/favicon.ico")
+      //    .attr("x", -8)
+      //    .attr("y", -8)
+      //    .attr("width", 16)
+      //    .attr("height", 16);
+
+      node.append("title")
           .text(function(d) { return d.chapter+" ["+d.kana+"] "+d.meaning });
 
-      tag.append("text")
+      node.append("text")
           .attr("dx", 12)
           .attr("dy", ".35em")
           .text(function(d) { return d.name });
@@ -83,9 +83,10 @@
             .attr("x2", function(d) { return d.target.x; })
             .attr("y2", function(d) { return d.target.y; });
 
-        dot.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+        node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
       });
     });
+
   </script>
 
 </body>
